@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Registry</title>
+</head>
+<body>
+    <h1>Data Registry</h1>
+
+    <form method="POST" action="/add_data" enctype="multipart/form-data">
+        <label for="dataset_name">Dataset Name:</label>
+        <input type="text" name="dataset_name" required>
+        <br>
+
+        <label for="raw_data_folder">Raw Data Folder:</label>
+        <input type="file" name="raw_data_folder" directory="" webkitdirectory="" mozdirectory="" required>
+        <br>
+
+        <label for="summary_data_link">Summary Data Link:</label>
+        <input type="url" name="summary_data_link" required>
+        <br>
+
+        <button type="submit">Add Data</button>
+    </form>
+    <h2>Search for Datasets:</h2>
+    <form method="GET" action="/search">
+        <label for="search_query">Search:</label>
+        <input type="text" name="search_query" required>
+        <button type="submit">Search</button>
+    </form>
+
+
+    <h2>Datasets:</h2>
+    <ul>
+        {% for dataset_name, entry_data in data.items() %}
+            <li>
+                <strong>Dataset Name:</strong> {{ dataset_name }},
+                <strong>Raw Data:</strong> {{ entry_data.raw_data_path }},
+                <strong>Summary Data:</strong> <a href="{{ entry_data.summary_data_link }}" target="_blank">{{ entry_data.summary_data_link }}</a>,
+                <strong>Download Raw Data:</strong> <a href="{{ url_for('download_raw_data', dataset_name=dataset_name) }}" download>Download</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
