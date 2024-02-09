@@ -4,43 +4,139 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Registry</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        form input[type="text"],
+        form input[type="url"],
+        form input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        form button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+
+        li {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        li strong {
+            display: inline-block;
+            min-width: 150px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        li a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        li a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <h1>Data Registry</h1>
 
     <form method="POST" action="/add_data" enctype="multipart/form-data">
-        <label for="dataset_name">Dataset Name:</label>
-        <input type="text" name="dataset_name" required>
-        <br>
-
         <label for="raw_data_folder">Raw Data Folder:</label>
-        <input type="file" name="raw_data_folder" directory="" webkitdirectory="" mozdirectory="" required>
-        <br>
+        <input type="file" name="raw_data_folder" directory="" webkitdirectory="" mozdirectory="" required><br>
+
+        <label for="processed_data_folder">Processed Data Folder:</label>
+        <input type="file" name="processed_data_folder" directory="" webkitdirectory="" mozdirectory="" required><br>
 
         <label for="summary_data_link">Summary Data Link:</label>
-        <input type="url" name="summary_data_link" required>
-        <br>
+        <input type="url" name="summary_data_link"><br>
 
         <button type="submit">Add Data</button>
     </form>
-    <h2>Search for Datasets:</h2>
-    <form method="GET" action="/search">
+
+    <h2>Data Entries:</h2>
+    <form action="/search" method="GET">
         <label for="search_query">Search:</label>
-        <input type="text" name="search_query" required>
+        <input type="text" id="search_query" name="search_query" placeholder="Enter dataset name">
         <button type="submit">Search</button>
     </form>
-
-
-    <h2>Datasets:</h2>
     <ul>
-        {% for dataset_name, entry_data in data.items() %}
+        {% for dataset, info in data.items() %}
             <li>
-                <strong>Dataset Name:</strong> {{ dataset_name }},
-                <strong>Raw Data:</strong> {{ entry_data.raw_data_path }},
-                <strong>Summary Data:</strong> <a href="{{ entry_data.summary_data_link }}" target="_blank">{{ entry_data.summary_data_link }}</a>,
-                <strong>Download Raw Data:</strong> <a href="{{ url_for('download_raw_data', dataset_name=dataset_name) }}" download>Download</a>
+                <strong>Dataset Name:</strong> {{ dataset }}<br>
+                <strong>Raw Data Path:</strong> <span id="raw_path_{{ dataset }}">{{ info.raw_data_path }}</span>
+                <button onclick="copyToClipboard('raw_path_{{ dataset }}')">Copy</button><br>
+                <strong>Processed Data Path:</strong> <span id="processed_path_{{ dataset }}">{{ info.processed_data_path }}</span>
+                <button onclick="copyToClipboard('processed_path_{{ dataset }}')">Copy</button><br>
+                <strong>Summary Data Link:</strong> <a href="{{ info.summarized_data_link }}" target="_blank">{{ info.summarized_data_link }}</a>
             </li>
         {% endfor %}
     </ul>
+    <script>
+        function copyToClipboard(elementId) {
+            var textElement = document.getElementById(elementId);
+            var text = textElement.textContent || textElement.innerText;
+            var tempInput = document.createElement("input");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            alert("Copied to clipboard: " + text);
+        }
+    </script>
+    
+
 </body>
 </html>
