@@ -115,14 +115,11 @@
         {% for dataset, info in data.items() %}
             <li>
                 <strong>Dataset Name:</strong> {{ dataset }}<br>
-                <strong>Raw Data Path:</strong> <span id="raw_path_{{ dataset }}">{{ info.raw_data_path }}</span>
-                <button onclick="copyToClipboard('raw_path_{{ dataset }}')">Copy</button><br>
-                <strong>Processed Data Path:</strong> <span id="processed_path_{{ dataset }}">{{ info.processed_data_path }}</span>
-                <button onclick="copyToClipboard('processed_path_{{ dataset }}')">Copy</button><br>
-                <strong>Summary Data Link:</strong> <a href="{{ info.summarized_data_link }}" target="_blank">{{ info.summarized_data_link }}</a>
+                <button onclick="view_dataset('{{ dataset }}')">View</button>
             </li>
         {% endfor %}
     </ul>
+    
     <script>
         function copyToClipboard(elementId) {
             var textElement = document.getElementById(elementId);
@@ -134,6 +131,10 @@
             document.execCommand("copy");
             document.body.removeChild(tempInput);
             alert("Copied to clipboard: " + text);
+        }
+
+        function view_dataset(datasetName) {
+            window.location.href = "/view_dataset/" + encodeURIComponent(datasetName);
         }
     </script>
     
