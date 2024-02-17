@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Dataset</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        .dataset-info {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 20px;
+        }
+
+        .dataset-info p {
+            margin: 10px 0;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        strong {
+            font-weight: bold;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .back-btn {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-btn a {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .back-btn a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ dataset_name }}</h1>
+        <div class="dataset-info">
+            <p><strong>Raw Data Path:</strong> {{ dataset_info.raw_data_path }}</p>
+            <p><strong>Processed Data Path:</strong> {{ dataset_info.processed_data_path }}</p>
+            <p><strong>Summary Data Link:</strong> <a href="{{ dataset_info.summarized_data_link }}" target="_blank">{{ dataset_info.summarized_data_link }}</a></p>
+        </div>
+        <div class="back-btn">
+            <a href="/">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>
