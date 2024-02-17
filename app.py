@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 
 # Define the path for the main data directory
-data_dir = "data"
+data_dir = "PDC"
 
 # Create directory if it doesn't exist
 os.makedirs(data_dir, exist_ok=True)
@@ -116,9 +116,13 @@ def search_data():
 
     return render_template("index.html", data=filtered_data)
 
-
-
-
+@app.route("/view_dataset/<dataset_name>")
+def view_dataset(dataset_name):
+    dataset_info = data.get(dataset_name)
+    if dataset_info:
+        return render_template("view_dataset.html", dataset_name=dataset_name, dataset_info=dataset_info)
+    else:
+        return "Dataset not found", 404
 
 def generate_dataset_name():
     # Get the number of existing datasets
