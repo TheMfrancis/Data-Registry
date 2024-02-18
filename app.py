@@ -118,6 +118,7 @@ def search_data():
 
 @app.route("/view_dataset/<dataset_name>")
 def view_dataset(dataset_name):
+    data = load_data_from_directories()
     dataset_info = data.get(dataset_name)
     if dataset_info:
         return render_template("view_dataset.html", dataset_name=dataset_name, dataset_info=dataset_info)
