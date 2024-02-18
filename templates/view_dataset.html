@@ -75,12 +75,45 @@
         <h1>{{ dataset_name }}</h1>
         <div class="dataset-info">
             <p><strong>Raw Data Path:</strong> {{ dataset_info.raw_data_path }}</p>
+            <button class="copy-button" onclick="copyCode('raw_code')">Copy Raw Data Code</button>
+            <pre id="raw_code" style="display:none;">import os<br><br># Print filenames of raw data<br>for filename in os.listdir("{{ dataset_info.raw_data_path | replace("\\", "\\\\") }}"):<br>    print(filename)</pre>
             <p><strong>Processed Data Path:</strong> {{ dataset_info.processed_data_path }}</p>
+            <button class="copy-button" onclick="copyCode('processed_code')">Copy Processed Data Code</button>
+            <pre id="processed_code" style="display:none;">import os<br><br># Print filenames of processed data<br>for filename in os.listdir("{{ dataset_info.processed_data_path }}"):<br>    print(filename)</pre>
             <p><strong>Summary Data Link:</strong> <a href="{{ dataset_info.summarized_data_link }}" target="_blank">{{ dataset_info.summarized_data_link }}</a></p>
         </div>
         <div class="back-btn">
             <a href="/">Back to Home</a>
         </div>
     </div>
+
+    <script>
+        function copyCode(codeId, isRawData) {
+            var codeElement = document.getElementById(codeId);
+            var code = codeElement.innerHTML;
+
+            // Conditionally replace <br> with newline characters
+            code = code.replace(/<br>/g, '\n');
+
+            // Conditionally add double slashes to raw data path
+            if (isRawData) {
+                code = code.replace(/for filename in os.listdir\("(.*)"\):/, 'for filename in os.listdir("$1"):');
+            }
+
+            // Create a temporary textarea to handle the copy action
+            var tempInput = document.createElement("textarea");
+            tempInput.value = code;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+
+            // Execute the copy command with the correct MIME type
+            document.execCommand("copy");
+
+            // Remove the temporary textarea from the DOM
+            document.body.removeChild(tempInput);
+
+            alert("Code copied to clipboard!");
+        }
+    </script>
 </body>
 </html>
