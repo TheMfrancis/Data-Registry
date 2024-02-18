@@ -97,7 +97,7 @@ def add_data():
         uploaded_file.save(os.path.join(processed_data_path, filename))
 
     # Create README file with data registry link
-    readme_content = f"This dataset is part of the data registry. For more information, visit: {url_for('search_data', search_query=dataset_name, _external=True)}"
+    readme_content = f"This dataset is part of the data registry. For more information, visit: {url_for('view_dataset', dataset_name=dataset_name, _external=True)}"
     with open(os.path.join(dataset_path, "README.txt"), "w") as readme_file:
         readme_file.write(readme_content)
 
